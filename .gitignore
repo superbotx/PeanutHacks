@@ -2,5 +2,5 @@
 *.pyc
 __pycache__
 tmp/*
-!external_modules/src
-external_modules
+external_modules/devl
+external_modules/build
