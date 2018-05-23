@@ -13,7 +13,7 @@ class ArmComponent(BaseComponent):
         4. return
         """
 
-    def move_to(self, server):
+    def move_to(self, pose, server):
         pass
 
     def shutdown(self):
