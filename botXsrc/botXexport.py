@@ -31,6 +31,10 @@ documentation generation.
 
 Modify the following variable to your needs
 """
+
+import sys
+sys.path.append('botXsrc')
+
 from peanut_hacks_bot import PeanutHacksBot
 from peanut_hacks_demo import PeanutHacksDemo
 
@@ -44,7 +48,7 @@ botXexport = {
         'description': 'This task performs the demo for Peanut Hacks 2018'
     },
     'peanut_hacks_bot': {
-        'module': PeanutHacksDemo,
+        'module': PeanutHacksBot,
         'type': 'robot',
         'inputs': [],
         'outputs': [],

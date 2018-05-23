@@ -49,7 +49,7 @@ class CameraAPI(BaseComponent):
 
     def cache_info_bridge(self, msg):
 
-        print msg
+        print (msg)
 
         # initialize json buffer for bridge
         # if not self.json_buf:

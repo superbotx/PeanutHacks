@@ -11,6 +11,9 @@ def main():
     task = botXexport['peanut_hacks_demo']['module'](robot)
 
     robot.start()
+    task.setup()
+    task.camera.setup_subscribers()
+
     # task.run(target_object='cup')
 
 

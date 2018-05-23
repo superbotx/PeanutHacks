@@ -1,0 +1,8 @@
+prefix=/home/ashis/botx_ws/PeanutHacks/external_modules/install
+
+Name: rosbridge_server
+Description: Description of rosbridge_server
+Version: 0.9.0
+Cflags: 
+Libs: -L/home/ashis/botx_ws/PeanutHacks/external_modules/install/lib 
+Requires: 

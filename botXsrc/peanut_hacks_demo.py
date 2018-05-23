@@ -1,4 +1,5 @@
 from botX.tasks import BaseTask
+from peanut_camera_api.peanut_camera_api import CameraAPI
 
 class PeanutHacksDemo(BaseTask):
     def __init__(self, robot):
@@ -7,9 +8,15 @@ class PeanutHacksDemo(BaseTask):
 
     def setup(self, **kwargs):
         # anything this task needs to know upfront will be set here
+
+        self.camera = CameraAPI()
+        # self.camera.setup()
+
         pass
 
     def run(self, **kwargs):
+        # self.camera
+
         """
         this method will perform the pick and place, by calling
         self.get_subtask('...')
