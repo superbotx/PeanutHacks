@@ -1,0 +1,67 @@
+# PeanutHacks CircleCI configuration file
+
+version: 2
+jobs:
+  build:
+    docker:
+      - image: tianhaoz95/desktop-ros-docker-image:kinetic
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+          # first try to use cache
+          - v1-dependencies-{{ checksum "requirements.txt" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
+
+      - run:
+          name: install python dependencies
+          command: |
+            python3 -m venv venv
+            . venv/bin/activate
+            pip install -r requirements.txt
+
+      - save_cache:
+          paths:
+            - ./venv
+          key: v1-dependencies-{{ checksum "requirements.txt" }}
+
+      # run tests!
+      - run:
+          name: check native pip packages
+          command: |
+            pip list
+
+      - run:
+          name: check venv pip packages
+          command: |
+            . venv/bin/activate
+            pip list
+
+      - run:
+          name: install botx module
+          command: |
+            git clone https://github.com/superbotx/botX
+            cd botX
+            python3 setup.py build
+            python3 setup.py install
+
+      - run:
+          name: test botx installation
+          command: |
+            botX version
+
+      - run:
+          name: install botx dependencies
+          command: |
+            source /opt/ros/kinetic/setup.bash
+            botX rebuild
+
+      - store_artifacts:
+          path: test-reports
+          destination: test-reports
