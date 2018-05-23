@@ -31,4 +31,25 @@ documentation generation.
 
 Modify the following variable to your needs
 """
-botXexport = {}
+from peanut_hacks_bot import PeanutHacksBot
+from peanut_hacks_demo import PeanutHacksDemo
+
+botXexport = {
+    'peanut_hacks_demo': {
+        'module': PeanutHacksDemo,
+        'type': 'task',
+        'inputs': [],
+        'outputs': [],
+        'requirements': ['robot'],
+        'description': 'This task performs the demo for Peanut Hacks 2018'
+    },
+    'peanut_hacks_bot': {
+        'module': PeanutHacksDemo,
+        'type': 'robot',
+        'inputs': [],
+        'outputs': [],
+        'requirements': ['robot'],
+        'description': 'This is the entire robot api for Peanut Hacks 2018'
+    }
+}
+
