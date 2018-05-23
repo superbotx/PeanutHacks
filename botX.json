@@ -1,7 +1,12 @@
 {
-    "name": "PeanutHacks",
-    "version": "0.0.1",
-    "botX_modules": {},
     "external_modules": {},
-    "source_scripts": []
+    "source_scripts": [],
+    "name": "PeanutHacks",
+    "botX_modules": {
+        "rosbridge_api": {
+            "name": "rosbridge_api",
+            "url": "https://github.com/superbotx/rosbridge_api.git"
+        }
+    },
+    "version": "0.0.1"
 }
