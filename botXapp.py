@@ -12,7 +12,8 @@ def main():
 
     robot.start()
     task.setup()
-    task.camera.setup_subscribers()
+    task.run()
+    
 
     # task.run(target_object='cup')
 
