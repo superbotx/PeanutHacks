@@ -11,14 +11,8 @@ class CameraAPI(BaseComponent):
         *Run some test to confirm connection
         *Start publishing images on some rostopic
         """
-
-
         self.publish_images()
-
         self.setup_subscribers()
-
-        return
-
 
     def setup_subscribers(self):
 
@@ -35,7 +29,7 @@ class CameraAPI(BaseComponent):
         self.server.subscribe(topic='/camera/color/image_raw', type='sensor_msgs/Image', callback=self.cache_color_bridge)
         self.server.subscribe(topic='/camera/depth/image_rect_raw', type='sensor_msgs/Image', callback=self.cache_depth_bridge)
         self.server.subscribe(topic='/camera/color/camera_info', type='sensor_msgs/CameraInfo', callback=self.cache_info_bridge)
-        
+
         return
 
 
@@ -107,7 +101,7 @@ class CameraAPI(BaseComponent):
         return im[0]
 
     def get_depth_image(self):
-        
+
         """
         *grap and return a depth image
         """
@@ -123,4 +117,3 @@ class CameraAPI(BaseComponent):
     def shutdown(self):
         external_command_pool.end_command(self.publish_proc_id)
         pass
-
