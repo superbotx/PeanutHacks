@@ -17,6 +17,7 @@ class RosbridgeSuitComponent(BaseComponent):
         self.running = True
         self.pub_callbacks = {}
         self.srv_callbacks = {}
+        self.srv_waitlist = {}
         self.thread_stopped = False
         self.q = queue.Queue()
 
@@ -57,6 +58,8 @@ class RosbridgeSuitComponent(BaseComponent):
                         service_id = data['service']
                         if service_id in self.srv_callbacks:
                             self.srv_callbacks[service_id](data['result'])
+                        else:
+                            self.srv_waitlist[service_id] = data['result']
                     else:
                         print('unknown data: ', data)
                 else:
@@ -101,14 +104,23 @@ class RosbridgeSuitComponent(BaseComponent):
         }
         self.send_req(req)
 
-    def call_service(self, service, callback, args=[]):
+    def call_service(self, service, callback=None, args=[]):
         req = {
             'op': 'call_service',
             'service': service,
             'args': args
         }
-        self.srv_callbacks[service] = callback
+        if callback:
+            self.srv_callbacks[service] = callback
         self.send_req(req)
+        result = None
+        if not callback:
+            while True:
+                if service in self.srv_waitlist:
+                    result = self.srv_waitlist[service]
+                    del self.srv_waitlist[service]
+                time.sleep(1)
+        return result
 
     def respond_service(self, service, result):
         req = {
