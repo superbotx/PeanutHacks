@@ -1,4 +1,4 @@
-import arm_srv
+#! /usr/bin/env python
 import rospy
 from util import *
 import numpy as np
@@ -6,6 +6,9 @@ import numpy as np
 import moveit_commander
 import moveit_msgs.msg
 from geometry_msgs.msg import Pose
+
+from peanut_moveit_interface.srv import *
+
 
 class MoveitInterface(object):
     """Interface between higher lvl code operating through botx and moveit
@@ -33,6 +36,9 @@ class MoveitInterface(object):
         display_trajectory_publisher = rospy.Publisher('/move_group/display_planned_path',
                                                        moveit_msgs.msg.DisplayTrajectory,
                                                        queue_size=20)
+
+        # TODO replace with an action service once botx can handle that
+        rospy.Service('peanut_moveit_interface', MoveitInterfaceGoal, self.higherup_handler)
 
     def execute_pose(self, pose_msg):
         """
@@ -77,5 +83,4 @@ class MoveitInterface(object):
 if __name__ == "__main__":
     rospy.init_node('moveit_interface')
     moveit_interface = MoveitInterface()
-    s = rospy.Service('moveit_interface', arm_srv, moveit_interface.higherup_handler)
     rospy.spin()
