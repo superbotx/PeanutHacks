@@ -19,16 +19,9 @@ class MoveitInterfacer(object):
         # this variable is set when a service is being handled
         self.processing_srv = False
 
-        # start the moveit commander
         moveit_commander.roscpp_initialize(sys.argv)
-
-        # create robot commander instance
         self.robot = moveit_commander.RobotCommander()
-
-        # initialize the planning scene
         self.scene = moveit_commander.PlanningSceneInterface()
-
-        # initialize the arm move group
         self.group = moveit_commander.MoveGroupCommander("arm")
 
         # for publishing trajectories to Rviz for visualization
@@ -50,7 +43,7 @@ class MoveitInterfacer(object):
         self.group.set_pose_target(pose_msg)
         found_plan = self.group.plan()
 
-        if found_plan:
+        if found_plan.joint_trajectory.joint_names != []:
             # block for now
             # self.group.execute(self.found_plan, wait=False)
             self.group.execute(found_plan, wait=True)
@@ -61,6 +54,7 @@ class MoveitInterfacer(object):
 
         self.group.clear_pose_targets()
 
+        rospy.loginfo(status)
         return status
 
     def higherup_handler(self, req):
@@ -76,7 +70,9 @@ class MoveitInterfacer(object):
         else:  # nothing going on, execute the request
             result = self.execute_pose(req.goal_pose)
 
-        return MoveitInterfaceResponse(result)
+        response = MoveitInterfaceResponse
+        response.data = result
+        return response
 
 
 if __name__ == "__main__":
