@@ -6,9 +6,9 @@ import subprocess
 class CameraAPI(BaseComponent):
     def setup(self):
         """
-        *Connect to camera
-        *Run some test to confirm connection
-        *Start publishing images on some rostopic
+        Connect to camera
+        Run some test to confirm connection
+        Start publishing images on some rostopic
         """
         self.publish_images()
         self.setup_subscribers()
@@ -30,13 +30,13 @@ class CameraAPI(BaseComponent):
 
     def calibrate(self):
         """
-        *run specfic function/sequence to calibrate camera
+        run specfic function/sequence to calibrate camera
         """
         pass
 
     def publish_images(self):
         """
-        *publish images to some rostopic
+        publish images to some rostopic
         """
         command = 'roslaunch realsense2_camera rs_camera.launch'
         self.publish_proc_id = external_command_pool.start_command(command)
@@ -90,7 +90,7 @@ class CameraAPI(BaseComponent):
 
     def get_color_image(self):
         """
-        *grab and return a color image
+        grab and return a color image
         """
         if not hasattr(self, 'color_buf'):
             self.color_buf = []
@@ -103,7 +103,7 @@ class CameraAPI(BaseComponent):
 
     def get_depth_image(self):
         """
-        *grap and return a depth image
+        grap and return a depth image
         """
         if not hasattr(self, 'depth_buf'):
             self.depth_buf = []
