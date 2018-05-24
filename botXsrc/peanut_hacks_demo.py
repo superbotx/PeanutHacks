@@ -54,6 +54,12 @@ class PeanutHacksDemo(BaseTask):
         decoded_image = base64.decodebytes(byte_image)
         image = Image.frombytes('RGB', (640, 480), decoded_image)
         image.show()
+
+        byte_image_d = im_d['data'].encode('utf-8')
+        decoded_image_d = base64.decodebytes(byte_image_d)
+        image_d = Image.frombytes('P', (640, 480), decoded_image_d)
+        image_d.show()
+
         im_result, info = self.mask_rcnn.detect(image)
         print(info)
         im_result.show()
