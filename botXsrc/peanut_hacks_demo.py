@@ -42,9 +42,24 @@ class PeanutHacksDemo(BaseTask):
         print("size: ", im['width']*im['height'])
         print("length: ", len(im['data']))
 
-        text_file = open("Output.txt", "w")
-        text_file.write(im['data'])
-        text_file.close()
+        # text_file = open("Output.txt", "w")
+        # text_file.write(im['data'])
+        # text_file.close()
+
+        # text_file = open("FullOutput.txt", "w")
+        # text_file.write(str(im))
+        # text_file.close()
+
+        byte_image = im['data'].encode('utf-8')
+        decoded_image = base64.decodebytes(byte_image)
+        image = Image.frombytes('RGB', (640, 480), decoded_image)
+        image.show()
+        im_result, info = self.mask_rcnn.detect(image)
+        print(info)
+        im_result.show()
+
+
+
 
         # im_bytes = im['data'].encode('utf-8')
         # print(im_bytes)
