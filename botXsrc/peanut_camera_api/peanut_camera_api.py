@@ -102,13 +102,11 @@ class CameraAPI(BaseComponent):
         return im[0]
 
     def get_depth_image(self):
-
         """
         *grap and return a depth image
         """
         if not hasattr(self, 'depth_buf'):
             self.depth_buf = []
-
         while not self.depth_buf:
             time.sleep(1)
         image = [x[0] for x in self.depth_buf]
