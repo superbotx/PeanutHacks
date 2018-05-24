@@ -1,8 +1,0 @@
-prefix=/home/ashis/botx_ws/PeanutHacks/external_modules/devel
-
-Name: rosbridge_library
-Description: Description of rosbridge_library
-Version: 0.9.0
-Cflags: -I/home/ashis/botx_ws/PeanutHacks/external_modules/devel/include
-Libs: -L/home/ashis/botx_ws/PeanutHacks/external_modules/devel/lib 
-Requires: message_runtime std_msgs geometry_msgs

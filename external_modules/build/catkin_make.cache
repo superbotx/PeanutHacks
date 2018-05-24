@@ -1,2 +1,0 @@
-rosbridge_suite/rosapi:rosbridge_suite/rosbridge_library:rosbridge_suite/rosbridge_server:rosbridge_suite/rosbridge_suite
--DCATKIN_DEVEL_PREFIX=/home/ashis/botx_ws/PeanutHacks/external_modules/devel -DCMAKE_INSTALL_PREFIX=/home/ashis/botx_ws/PeanutHacks/external_modules/install -G Unix Makefiles
