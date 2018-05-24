@@ -1,10 +1,9 @@
 from botX.components import BaseComponent
 from botX.applications import external_command_pool, botXimport
-
 import time
+import subprocess
 
 class CameraAPI(BaseComponent):
-
     def setup(self):
         """
         *Connect to camera
@@ -15,23 +14,19 @@ class CameraAPI(BaseComponent):
         self.setup_subscribers()
 
     def setup_subscribers(self):
-
         # Initializes rosbridge
         self.server = botXimport('rosbridge_api')['rosbridge_suit_component']['module']()
         self.server.setup()
 
         # intialize buffers
-        color_buf = []
-        depth_buf = []
-        info_buf = []
+        self.color_buf = []
+        self.depth_buf = []
+        self.info_buf = []
 
         # Uses rosbridge to subscribe to camera topics and has a callback to store them in a buffer
         self.server.subscribe(topic='/camera/color/image_raw', type='sensor_msgs/Image', callback=self.cache_color_bridge)
         self.server.subscribe(topic='/camera/depth/image_rect_raw', type='sensor_msgs/Image', callback=self.cache_depth_bridge)
         self.server.subscribe(topic='/camera/color/camera_info', type='sensor_msgs/CameraInfo', callback=self.cache_info_bridge)
-
-        return
-
 
     def calibrate(self):
         """
@@ -45,10 +40,18 @@ class CameraAPI(BaseComponent):
         """
         command = 'roslaunch realsense2_camera rs_camera.launch'
         self.publish_proc_id = external_command_pool.start_command(command)
-        return
+        while True:
+            topic_output = subprocess.check_output(['rostopic', 'list'])
+            if self.node_all_up(topic_output):
+                break
+            time.sleep(1)
+            print('waiting for camera nodes')
+        print('all camera nodes up')
+
+    def node_all_up(self, topic_output):
+        return True
 
     def cache_color_bridge(self, msg):
-        # initialize json color image buffer for bridge
         if not hasattr(self, 'color_buf'):
             self.color_buf = []
 
@@ -61,7 +64,6 @@ class CameraAPI(BaseComponent):
         return
 
     def cache_depth_bridge(self, msg):
-        # initialize json depth image buffer for bridge
         if not hasattr(self, 'depth_buf'):
             self.depth_buf = []
 
@@ -74,7 +76,6 @@ class CameraAPI(BaseComponent):
         return
 
     def cache_info_bridge(self, msg):
-
         if not hasattr(self, 'info_buf'):
             self.info_buf = []
 
