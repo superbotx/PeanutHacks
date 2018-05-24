@@ -19,7 +19,7 @@ class ArmComponent(BaseComponent):
         :param pose:
         :return:
         """
-        service = 'peanut_moveit_interface'
+        service = '/peanut_moveit_interface'
         self.server.call_service(service, callback=self.move_response_cb, args=[pose])
 
     def move_response_cb(self, msg):
@@ -34,3 +34,12 @@ class ArmComponent(BaseComponent):
         only need to terminate the roslaunch process
         """
         pass
+
+ac = ArmComponent()
+my_pose = dict()
+my_pose['position'] = {'x':0.2, 'y':-0.27, 'z':0.48}
+my_pose['orientation'] = {'x':0.67, 'y':-0.15, 'z':-0.69, 'w':0.17}
+try:
+    ac.move_to(my_pose)
+except ValueError as e:
+    print e
