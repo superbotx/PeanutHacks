@@ -1,6 +1,4 @@
 {
-    "external_modules": {},
-    "source_scripts": [],
     "name": "PeanutHacks",
     "botX_modules": {
         "rosbridge_api": {
@@ -8,5 +6,12 @@
             "url": "https://github.com/superbotx/rosbridge_api.git"
         }
     },
-    "version": "0.0.1"
+    "source_scripts": [],
+    "version": "0.0.1",
+    "external_modules": {
+        "rosbridge_suite": {
+            "name": "rosbridge_suite",
+            "url": "https://github.com/RobotWebTools/rosbridge_suite.git"
+        }
+    }
 }
