@@ -20,8 +20,6 @@ class PeanutHacksDemo(BaseTask):
         # self.camera.setup()
         self.mask_rcnn = ez.EZ()
 
-        pass
-
     def run(self, **kwargs):
         self.camera.setup_subscribers()
         im = self.camera.get_color_image()
@@ -78,7 +76,7 @@ class PeanutHacksDemo(BaseTask):
         # r = base64.decodestring(s)
         # q = np.frombuffer(r, dtype=np.float64)
 
-        # TODO 
+        # TODO
         #  * run through mask_rcnn and return bounding box
 
         # annotated_img, statistic_res = self.mask_rcnn.detect(images[0])
