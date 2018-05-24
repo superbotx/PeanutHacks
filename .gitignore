@@ -2,3 +2,5 @@
 *.pyc
 __pycache__
 tmp/*
+external_modules/devl
+external_modules/build
