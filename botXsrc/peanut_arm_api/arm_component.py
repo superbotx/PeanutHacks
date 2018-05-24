@@ -10,7 +10,7 @@ class ArmComponent(BaseComponent):
         1. TODO make sure the moveit interface topic is in the list
         """
         # Initialize rosbridge
-        self.server = botXimport('rosbridge_api')['rosbridge_suit_component']['module']()
+        self.server = botXimport('rosbridge')['rosbridge_suit_component']['module']()
         self.server.setup()
 
     def move_to(self, pose):
@@ -35,11 +35,3 @@ class ArmComponent(BaseComponent):
         """
         pass
 
-ac = ArmComponent()
-my_pose = dict()
-my_pose['position'] = {'x':0.2, 'y':-0.27, 'z':0.48}
-my_pose['orientation'] = {'x':0.67, 'y':-0.15, 'z':-0.69, 'w':0.17}
-try:
-    ac.move_to(my_pose)
-except ValueError as e:
-    print e
