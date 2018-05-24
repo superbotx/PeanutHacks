@@ -5,3 +5,4 @@ tmp/*
 *.h5
 external_modules/build/*
 external_modules/devel/*
+external_modules/.catkin_workspace
