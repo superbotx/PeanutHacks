@@ -1,4 +1,5 @@
 from botX.components import BaseComponent
+from botX.applications import external_command_pool, botXimport
 
 class ArmComponent(BaseComponent):
     def __init__(self):
@@ -6,17 +7,31 @@ class ArmComponent(BaseComponent):
 
     def setup(self):
         """
-        0. start the roslaunch
-        1. make sure the moveit interface topic is in the list
-        2. send one ping message
-        3. wait until receive pong message
-        4. return
+        1. TODO make sure the moveit interface topic is in the list
         """
+        # Initialize rosbridge
+        self.server = botXimport('rosbridge')['rosbridge_suit_component']['module']()
+        self.server.setup()
 
-    def move_to(self, pose, server):
-        pass
+    def move_to(self, pose):
+        """
+        Move arm to given pose
+        :param pose:
+        :return:
+        """
+        service = '/peanut_moveit_interface'
+        self.server.call_service(service, callback=self.move_response_cb, args=[pose])
+
+    def move_response_cb(self, msg):
+        """Handle response received from peanut_moveit_interface"""
+        # store in buffer?
+        if msg.data == 'failed':
+            raise ValueError('execution failed')
+        return
 
     def shutdown(self):
         """
         only need to terminate the roslaunch process
         """
+        pass
+
