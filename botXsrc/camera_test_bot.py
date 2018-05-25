@@ -2,7 +2,7 @@ from botX.robots import BaseRobot
 from botX.components import BaseComponent
 from botX.applications import botXimport
 
-class PeanutHacksBot(BaseRobot):
+class CameraTestBot(BaseRobot):
 
     def __init__(self):
         super(PeanutHacksBot, self).__init__()

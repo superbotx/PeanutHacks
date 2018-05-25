@@ -35,8 +35,8 @@ Modify the following variable to your needs
 import sys
 sys.path.append('botXsrc')
 
-from .peanut_hacks_bot import PeanutHacksBot
-from .peanut_hacks_demo import PeanutHacksDemo
+from .camera_test_bot import CameraTestBot
+from .camera_test import CameraTestTask
 from .hack import HackTask
 
 botXexport = {

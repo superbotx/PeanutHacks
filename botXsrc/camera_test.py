@@ -8,7 +8,7 @@ import base64
 import numpy as np
 
 
-class PeanutHacksDemo(BaseTask):
+class CameraTestTask(BaseTask):
     def __init__(self, robot):
         super(PeanutHacksDemo, self).__init__(robot)
         # self.add_subtask('locate_object', LocateObject(robot))
