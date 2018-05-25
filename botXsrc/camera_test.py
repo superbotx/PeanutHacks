@@ -7,7 +7,6 @@ import io
 import base64
 import numpy as np
 
-
 class CameraTestTask(BaseTask):
     def __init__(self, robot):
         super(PeanutHacksDemo, self).__init__(robot)
