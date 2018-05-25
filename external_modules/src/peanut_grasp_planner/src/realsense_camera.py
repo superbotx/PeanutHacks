@@ -21,7 +21,7 @@ except ImportError:
 
 from perception import ColorImage, DepthImage, CameraIntrinsics, Image
 
-MM_TO_METERS = 1000
+MM_TO_METERS = 1.0/1000
 
 class RealSenseBridged:
     """Class for interacting with a Kinect v2 RGBD sensor through the kinect bridge
@@ -87,7 +87,7 @@ class RealSenseBridged:
         """ subscribe to image topic and keep it up to date
         """
         color_arr = self._process_image_msg(image_msg)
-        self._cur_color_im = ColorImage(color_arr[:,:,::-1], self._frame)
+        self._cur_color_im = ColorImage(color_arr, self._frame)
  
     def _depth_image_callback(self, image_msg):
         """ subscribe to depth image topic and keep it up to date
@@ -95,7 +95,6 @@ class RealSenseBridged:
         encoding = image_msg.encoding
         try:
             depth_arr = self._bridge.imgmsg_to_cv2(image_msg, encoding)
-            import pdb; pdb.set_trace()
 
         except CvBridgeError as e:
             rospy.logerr(e)
@@ -138,7 +137,7 @@ class RealSenseBridged:
         timeout = 50
         try:
             rospy.loginfo("waiting to recieve a message from the Kinect")
-            print(self.topic_image_color)
+            print("topic format {}".format(self.topic_image_color))
             rospy.wait_for_message(self.topic_image_color, sensor_msgs.msg.Image, timeout=timeout)
             rospy.wait_for_message(self.topic_image_depth, sensor_msgs.msg.Image, timeout=timeout)
             rospy.wait_for_message(self.topic_info_camera, sensor_msgs.msg.CameraInfo, timeout=timeout)
@@ -219,6 +218,8 @@ class RealSenseBridged:
         return median_depth
 
 if __name__ == '__main__':
+    rospy.init_node("Grasp_planner_test_node", log_level=rospy.DEBUG)
+
     camera = RealSenseBridged(frame='camera_link')
     camera.start()
 
@@ -226,7 +227,8 @@ if __name__ == '__main__':
 
     import matplotlib.pyplot as plt
 
-    plt.imshow(ColorImage.data)
+    plt.imshow(color_image.data)
+    plt.show()
 
     # bounding_box = self._get_bounding_box(object_name, color_image)
 

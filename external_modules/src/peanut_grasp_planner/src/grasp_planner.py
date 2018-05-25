@@ -24,7 +24,6 @@ from perception import RgbdDetectorFactory, RgbdSensorFactory
 
 from autolab_core import YamlConfig, RigidTransform
 from autolab_core import Box
-# import autolab_core.rigid_transformations.RigidTransform as RigidTransform
 
 from cv_bridge import CvBridge, CvBridgeError
 

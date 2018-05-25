@@ -1,15 +1,18 @@
 #!/usr/bin/env python
 
+import os
 import numpy as np
 import tf
 import rospy
 import signal
 
+import rospy
+
 import spacial_location
 from spacial_location import Pose #TODO replace this with full reference, too many poses to use simply Pose
 
 from std_msgs.msg import Header
-from gqcnn.srv import GQCNNGraspPlanner
+from gqcnn.srv import *
 from gqcnn.msg import GQCNNGrasp, BoundingBox
 import geometry_msgs.msg
 import std_msgs.msg
@@ -32,6 +35,10 @@ import copy
 
 import matplotlib.pyplot as pyplot
 import realsense_camera
+
+import rospkg
+
+
 
 class GraspPlanner:
     """ Abstract clss for grasp planning.
@@ -101,7 +108,7 @@ class GQCNNPlanner(GraspPlanner):
         except (tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException):
             rospy.logerr("tf was not able to find a transformation from {} to {}".format(from_frame, to_frame))
             return False
-        #import pdb; pdb.set_trace()
+
         quat = [quat_out[3], quat_out[0], quat_out[1], quat_out[2]] #the quaternion of ros has a different representation than other sys
         return RigidTransform(quat, pos, from_frame, to_frame)
         
@@ -123,6 +130,7 @@ class GQCNNPlanner(GraspPlanner):
         pyplot.title("depth image")
         pyplot.imshow(depth_image.data)
 
+        # import pdb; pdb.set_trace()
         # inpaint to remove holes
         inpainted_color_image = color_image.inpaint(self.config["inpaint_rescale_factor"]) #TODO make rescale factor in config
         inpainted_depth_image = depth_image.inpaint(self.config["inpaint_rescale_factor"])
@@ -160,7 +168,7 @@ class GQCNNPlanner(GraspPlanner):
         T_grasp_gripper = RigidTransform(rotation, translation, from_frame="gripper", to_frame="grasp")
         T_grasp_world = T_world_camera * T_grasp_camera * T_grasp_gripper
 
-        import pdb; pdb.set_trace()
+        # import pdb; pdb.set_trace()
         t_quat = [T_grasp_world.quaternion[1], T_grasp_world.quaternion[2], T_grasp_world.quaternion[3], T_grasp_world.quaternion[0]]
         grasp_pose_world = Pose(T_grasp_world.position, t_quat, frame="/world")
 
@@ -234,7 +242,6 @@ def offset_hand(pose_input, unit_vector=[1, 0, 0] ,offset_dist=0.1):
 
     pose_input.show_position_marker(ident = 1, label = "grasp pose")
     pre_grasp_pose.show_position_marker(ident = 2, label = "pregrasp pose")
-    # import pdb; pdb.set_trace()
 
     return pre_grasp_pose
 
@@ -246,28 +253,35 @@ def test_offset_hand():
     offset_hand(grasp_pose)
 
 def test_GQCNN():
+    print("starting grasp planner 2")
 
-    config = YamlConfig('/home/baymax/catkin_ws/src/jaco_manipulation/cfg/grasp_test.yaml')
+    rospkg.RosPack()
+    # get an instance of RosPack with the default search paths
+    rospack = rospkg.RosPack()
+    package_path = rospack.get_path('peanut_grasp_planner')
+    
+    config = YamlConfig(os.path.join(package_path,"cfg/grasp_test.yaml"))
 
     # create rgbd sensor
     sensor = realsense_camera.RealSenseBridged(frame='camera_link')
     sensor.start()
 
-    color_image, depth_image, _ = camera.frames()
+    color_image, depth_image, _ = sensor.frames()
 
     # setup safe termination
     def handler(signum, frame):
         rospy.loginfo('caught CTRL+C, exiting...')        
         if sensor is not None:
-            sensor.stop()
-        if subscriber is not None and subscriber._started:
-            subscriber.stop()            
+            sensor.stop()          
         exit(0)
     signal.signal(signal.SIGINT, handler)
 
-    planner = GQCNNPlanner(sensor, config)
+    planner = GQCNNPlanner(sensor.ir_intrinsics, config)
+
+    bounding_box = np.array([300,200,400,300]) 
+
     # rospy.sleep(10)
-    planner.get_grasp_plan("cup")
+    planner.get_grasp_plan(bounding_box, color_image, depth_image)
 
 if __name__ == '__main__':
     rospy.init_node("Grasp_planner_test_node", log_level=rospy.DEBUG)
