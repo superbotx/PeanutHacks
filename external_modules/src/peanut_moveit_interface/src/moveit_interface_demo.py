@@ -23,12 +23,21 @@ if __name__ == '__main__':
     pose_msg.orientation.z = -0.69
     pose_msg.orientation.w = 0.17
 
+    prepose_msg = Pose()
+    prepose_msg.orientation.x = 0.800
+    prepose_msg.orientation.y = 0.599
+    prepose_msg.orientation.z = -0.018
+    prepose_msg.orientation.w = 0.031
+    prepose_msg.position.x = 0.333
+    prepose_msg.position.y = -0.114
+    prepose_msg.position.z = 0.101
+
     rospy.loginfo('connecting to interface service...')
     rospy.wait_for_service('peanut_moveit_interface')
     rospy.loginfo('found interface service!')
     try:
         actually_move_it = rospy.ServiceProxy('peanut_moveit_interface', MoveitInterface)
-        response = actually_move_it(pose_msg)
+        response = actually_move_it(prepose_msg)
         rospy.loginfo("response was: {}".format(response.result.data))
     except rospy.ServiceException, e:
         print "Service call failed: %s"%e
