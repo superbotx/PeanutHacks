@@ -74,7 +74,7 @@ class MoveitInterfacer(object):
         else:  # nothing going on, execute the request
             result = self.execute_pose(req.goal_pose)
 
-        response = MoveitInterfaceResponse()
+        response = String()
         response.data = result
         return response
 
