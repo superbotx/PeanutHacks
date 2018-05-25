@@ -1,0 +1,5 @@
+sensor_msgs/Image colorImage
+sensor_msgs/Image depthImage
+sensor_msgs/Image maskImage
+---
+std_msgs/String result
