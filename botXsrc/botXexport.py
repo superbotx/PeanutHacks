@@ -35,8 +35,9 @@ Modify the following variable to your needs
 import sys
 sys.path.append('botXsrc')
 
-from peanut_hacks_bot import PeanutHacksBot
-from peanut_hacks_demo import PeanutHacksDemo
+from .peanut_hacks_bot import PeanutHacksBot
+from .peanut_hacks_demo import PeanutHacksDemo
+from .hack import HackTask
 
 botXexport = {
     'peanut_hacks_demo': {
@@ -54,6 +55,13 @@ botXexport = {
         'outputs': [],
         'requirements': ['robot'],
         'description': 'This is the entire robot api for Peanut Hacks 2018'
+    },
+    'hack_task': {
+        'module': HackTask,
+        'type': 'robot',
+        'inputs': [],
+        'outputs': [],
+        'requirements': ['robot'],
+        'description': 'This is the entire robot api for Peanut Hacks 2018'
     }
 }
-
