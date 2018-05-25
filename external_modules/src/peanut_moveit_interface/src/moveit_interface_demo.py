@@ -4,6 +4,7 @@
 import rospy
 
 from geometry_msgs.msg import Pose
+from std_msgs.msg import String, Float64
 
 from peanut_moveit_interface.srv import *
 
@@ -32,4 +33,24 @@ if __name__ == '__main__':
     except rospy.ServiceException, e:
         print "Service call failed: %s"%e
 
+    rospy.loginfo('now doing the gripper')
+
+    Units = String()
+    Units.data = 'percent'
+
+    try:
+        move_gripper_fingers = rospy.ServiceProxy('peanut_gripper_interface', GripperInterface)
+
+        for i in range(2):
+            FingerPositions = [Float64(50), Float64(50), Float64(50)]
+            response = move_gripper_fingers(Units, FingerPositions)
+            rospy.loginfo("response was: {}".format(response.result))
+
+            rospy.sleep(1.)  # give gripper the time to execute
+            FingerPositions = [Float64(90), Float64(90), Float64(90)]
+            response = move_gripper_fingers(Units, FingerPositions)
+            rospy.loginfo("response was: {}".format(response.result.data))
+
+    except rospy.ServiceException, e:
+        print "Service call failed: %s"%e
 
