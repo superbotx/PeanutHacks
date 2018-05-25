@@ -5,7 +5,9 @@ import numpy as np
 import moveit_commander
 import moveit_msgs.msg
 from geometry_msgs.msg import Pose
+from std_msgs.msg import String
 
+from gripper_client import GripperController
 from peanut_moveit_interface.srv import *
 
 
@@ -23,6 +25,7 @@ class MoveitInterfacer(object):
         self.robot = moveit_commander.RobotCommander()
         self.scene = moveit_commander.PlanningSceneInterface()
         self.group = moveit_commander.MoveGroupCommander("arm")
+        self.gripper_controller = GripperController()
 
         # for publishing trajectories to Rviz for visualization
         display_trajectory_publisher = rospy.Publisher('/move_group/display_planned_path',
@@ -31,6 +34,7 @@ class MoveitInterfacer(object):
 
         # TODO replace with an action service once botx can handle that
         rospy.Service('peanut_moveit_interface', MoveitInterface, self.higherup_handler)
+        rospy.Service('peanut_gripper_interface', GripperInterface, self.gripper_higherup_handler)
 
     def execute_pose(self, pose_msg):
         """
@@ -70,10 +74,32 @@ class MoveitInterfacer(object):
         else:  # nothing going on, execute the request
             result = self.execute_pose(req.goal_pose)
 
-        response = MoveitInterfaceResponse
+        response = MoveitInterfaceResponse()
         response.data = result
         return response
 
+    def gripper_higherup_handler(self, req):
+        """handle an incoming request
+         :param req: GripperInterface.srv
+         """
+        if self.processing_srv:
+            # TODO decide what to do (based on the request contents?)
+            # for now terminate
+            raise NotImplementedError('woops lol')
+            # self.group.TERMINATE  # TODO
+
+        else:  # nothing going on, execute the request
+            posns = [int(pos.data) for pos in req.finger_positions]
+            try:
+                self.gripper_controller.grip(req.units.data, posns)
+                result = 'success'
+            except ValueError:
+                result = 'failed'
+            rospy.loginfo(result)
+
+        response = String()
+        response.data = 'failed'
+        return response
 
 if __name__ == "__main__":
     rospy.init_node('moveit_interface')

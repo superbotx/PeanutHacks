@@ -1,0 +1,4 @@
+std_msgs/String units
+std_msgs/Float64[] finger_positions
+---
+std_msgs/String result
