@@ -19,7 +19,15 @@ class HackTask(BaseTask):
                     pose = self.robot.components['grasp_planner'].plan(object_info)
                     status = self.robot.components['arm'].move_to(pose)
                     if status == 'success':
-                        print('done')
+                        status = self.robot.components['arm'].grasp(pose)
+                        if status == 'success':
+                            status = self.robot.components['arm'].reset()
+                            if status == 'success':
+                                print('done')
+                            else:
+                                print('cannot reset')
+                        else:
+                            print('cannot grasp target')
                     else:
                         print('cannot reach target')
                 else:
